@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f72555"><link rel="manifest" href="manifest.webmanifest">
+<title>NS Jewellery</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#fff7f9;color:#171717}
+header{background:linear-gradient(135deg,#f72555,#ff7892);color:#fff;padding:18px;border-radius:0 0 28px 28px}
+.nav{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center}.brand{font-size:26px;font-weight:800}.small{font-size:12px;opacity:.85}
+.hero{max-width:1100px;margin:18px auto 0;background:#fff;color:#222;border-radius:24px;padding:25px;box-shadow:0 12px 35px #0002}
+.hero h1{margin:0 0 8px;font-size:30px}.hero p{color:#666;line-height:1.5}.btn{border:0;border-radius:13px;padding:11px 15px;font-weight:700;cursor:pointer}.pink{background:#f72555;color:#fff}.white{background:#fff;color:#222}
+main{max-width:1100px;margin:auto}.section{padding:22px 16px}.section h2{margin:0 0 15px}.cats{display:flex;gap:10px;overflow:auto}.cat{background:#fff;border:1px solid #f0dfe4;border-radius:18px;padding:13px 17px;min-width:95px;text-align:center;cursor:pointer}.cat b{display:block;font-size:25px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.card{background:#fff;border-radius:18px;overflow:hidden;border:1px solid #f0dfe4}.photo{height:180px;background:#ffe7ed;display:flex;align-items:center;justify-content:center;font-size:65px}.info{padding:13px}.price{font-weight:800;color:#f72555;margin:6px 0 10px}.actions{display:flex;gap:7px}.actions button{flex:1}
+.cart{position:fixed;left:15px;bottom:15px;background:#171717;color:#fff;border-radius:99px;padding:13px 17px;display:none;z-index:5}
+.wa{position:fixed;right:15px;bottom:15px;background:#25d366;color:#fff;text-decoration:none;border-radius:99px;padding:13px 17px;font-weight:800;z-index:5}
+footer{text-align:center;padding:35px 15px 90px;color:#777}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}.photo{height:205px}}
+</style></head>
+<body>
+<header><div class="nav"><div><div class="brand">NS Jewellery ✨</div><div class="small">Elegant • Trusted • Affordable</div></div>
+<button class="btn white" onclick="checkout()">🛒 Cart <span id="count">0</span></button></div>
+<div class="hero"><h1>Jewellery that makes every moment special</h1><p>Bridal sets, necklaces, earrings, bangles and rings. Order easily through WhatsApp.</p><button class="btn pink" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button></div></header>
+<main>
+<section class="section"><h2>Categories</h2><div class="cats">
+<div class="cat" onclick="filter('All')"><b>💎</b>All</div><div class="cat" onclick="filter('Bridal')"><b>👑</b>Bridal</div>
+<div class="cat" onclick="filter('Necklace')"><b>📿</b>Necklaces</div><div class="cat" onclick="filter('Earrings')"><b>💠</b>Earrings</div>
+<div class="cat" onclick="filter('Bangles')"><b>✨</b>Bangles</div><div class="cat" onclick="filter('Rings')"><b>💍</b>Rings</div>
+</div></section>
+<section class="section" id="products"><h2>Featured Collection</h2><div class="grid" id="grid"></div></section>
+</main>
+<div class="cart" id="cart" onclick="checkout()">🛍️ <span id="cartText">0 items</span></div>
+<a class="wa" href="https://wa.me/923064663917" target="_blank">💬 WhatsApp</a>
+<footer><b>NS Jewellery</b><br>Pakistan-wide delivery • Cash on Delivery<br>WhatsApp: 0306-4663917<br><br><a href="admin.html">Admin Panel</a></footer>
+<script>
+const defaultProducts=[
+{id:1,name:"Royal Bridal Set",cat:"Bridal",price:5499,icon:"👑",desc:"Elegant bridal jewellery set."},
+{id:2,name:"Pearl Necklace",cat:"Necklace",price:2499,icon:"📿",desc:"Classic pearl style necklace."},
+{id:3,name:"Elegant Earrings",cat:"Earrings",price:1499,icon:"💠",desc:"Party wear statement earrings."},
+{id:4,name:"Classic Bangles",cat:"Bangles",price:1999,icon:"✨",desc:"Elegant bangles for every occasion."},
+{id:5,name:"Crystal Ring",cat:"Rings",price:999,icon:"💍",desc:"Beautiful crystal ring."},
+{id:6,name:"Party Wear Set",cat:"Bridal",price:3299,icon:"💎",desc:"Stylish party wear set."},
+{id:7,name:"Blue Stone Necklace",cat:"Necklace",price:2899,icon:"📿",desc:"Blue stone necklace."},
+{id:8,name:"Floral Earrings",cat:"Earrings",price:1299,icon:"🌸",desc:"Floral design earrings."}
+];
+let products=JSON.parse(localStorage.getItem('ns_products')||'null')||defaultProducts;
+let cart=JSON.parse(localStorage.getItem('ns_cart')||'[]'), active='All';
+const money=n=>'Rs. '+Number(n).toLocaleString('en-PK');
+function render(){let a=products.filter(p=>active==='All'||p.cat===active);grid.innerHTML=a.map(p=>`<div class="card"><div class="photo">${p.icon}</div><div class="info"><b>${p.name}</b><div class="small">${p.desc}</div><div class="price">${money(p.price)}</div><div class="actions"><button class="btn pink" onclick="add(${p.id})">Add to Cart</button><button class="btn" onclick="order(${p.id})">Order</button></div></div></div>`).join('');update()}
+function filter(x){active=x;render()}
+function add(id){cart.push(id);localStorage.setItem('ns_cart',JSON.stringify(cart));update();alert('Added to cart')}
+function update(){count.textContent=cart.length;cartText.textContent=cart.length+' item'+(cart.length===1?'':'s');document.getElementById('cart').style.display=cart.length?'block':'none'}
+function order(id){let p=products.find(x=>x.id===id);let msg=`Assalam o Alaikum, I want to order:\\n${p.name}\\nPrice: ${money(p.price)}\\nPlease share delivery details.`;location.href='https://wa.me/923064663917?text='+encodeURIComponent(msg)}
+function checkout(){if(!cart.length){alert('Cart is empty');return}let items=cart.map(id=>products.find(p=>p.id===id)).filter(Boolean);let total=items.reduce((s,p)=>s+p.price,0);let lines=items.map(p=>`${p.name} - ${money(p.price)}`).join('\\n');let msg=`Assalam o Alaikum, I want to place an order from NS Jewellery:\\n\\n${lines}\\n\\nTotal: ${money(total)}\\nName:\\nAddress:\\nCity:\\nPhone:`;location.href='https://wa.me/923064663917?text='+encodeURIComponent(msg)}
+render();
+</script></body></html>

@@ -1,0 +1,8 @@
+{
+  "name": "NS Jewellery",
+  "short_name": "NS Jewellery",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff7f9",
+  "theme_color": "#f72555"
+}

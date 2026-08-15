@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NS Jewellery Admin</title><style>
+body{font-family:Arial;margin:0;background:#fff7f9;color:#222}.top{background:#f72555;color:#fff;padding:22px}.wrap{max-width:950px;margin:auto;padding:18px}.panel{background:#fff;border:1px solid #efdde2;border-radius:18px;padding:18px;margin-bottom:18px}input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0 12px}.btn{padding:11px 15px;border:0;border-radius:10px;font-weight:700}.pink{background:#f72555;color:#fff}.danger{background:#eee}.item{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #eee;padding:12px 0}.note{color:#777;font-size:13px;line-height:1.5}</style></head>
+<body><div class="top"><div class="wrap"><h1>NS Jewellery — Admin Panel</h1><div>Manage products on this demo store</div></div></div>
+<div class="wrap"><div class="panel"><h2>Add Product</h2>
+<input id="name" placeholder="Product name"><select id="cat"><option>Bridal</option><option>Necklace</option><option>Earrings</option><option>Bangles</option><option>Rings</option></select>
+<input id="price" type="number" placeholder="Price (Rs.)"><input id="icon" placeholder="Emoji/icon e.g. 💎"><input id="desc" placeholder="Short description">
+<button class="btn pink" onclick="add()">Add Product</button></div>
+<div class="panel"><h2>Products</h2><div id="list"></div></div>
+<div class="panel"><h2>Important</h2><div class="note">This is a front-end demo. Product changes are saved in the browser using local storage. A production app needs a secure database, login, real image uploads, order management and payment/delivery integration.</div><p><a href="index.html">← Open Store</a></p></div></div>
+<script>
+let products=JSON.parse(localStorage.getItem('ns_products')||'[]');
+function save(){localStorage.setItem('ns_products',JSON.stringify(products));render()}
+function add(){let name=document.getElementById('name').value.trim(),price=Number(document.getElementById('price').value),cat=document.getElementById('cat').value,icon=document.getElementById('icon').value||'💎',desc=document.getElementById('desc').value||'';if(!name||!price)return alert('Enter product name and price');products.push({id:Date.now(),name,price,cat,icon,desc});save();document.getElementById('name').value='';document.getElementById('price').value='';document.getElementById('desc').value=''}
+function del(id){products=products.filter(p=>p.id!==id);save()}
+function render(){list.innerHTML=products.map(p=>`<div class="item"><div><b>${p.icon} ${p.name}</b><br>${p.cat} — Rs. ${p.price.toLocaleString()}</div><button class="btn danger" onclick="del(${p.id})">Delete</button></div>`).join('')||'<div class="note">No products yet. Add your first product above.</div>'}
+render();
+</script></body></html>
